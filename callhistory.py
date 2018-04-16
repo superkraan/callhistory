@@ -54,72 +54,72 @@ def consolidate_rows(csv, user_input):
     all_call_history_var_list.sort()
 
     #Temporarily remove header row.
-    header = list_of_list.pop(0)
+    header = csv.pop(0)
 
 
     #Sort by attempts.
-    list_of_list.sort(key=lambda x: int(x[user_input["attempts"]]))
+    csv.sort(key=lambda x: int(x[user_input["attempts"]]))
 
 
     #Insert header back.
-    list_of_list.insert(0, header)
+    csv.insert(0, header)
 
     #Append additional headers for max # of attempts.
     attempts = []
 
 
-    for i in range(1, (len(list_of_list))):
-        attempts.append(int(list_of_list[i][user_input["attempts"]]))
+    for i in range(1, (len(csv))):
+        attempts.append(int(csv[i][user_input["attempts"]]))
 
 
     max_attempts = int(max(attempts))
 
     for r in range(2, (max_attempts + 1)):
-        for i in all_user_input["call_history"]:
-            list_of_list[0].append(list_of_list[0][i] + str(r))
+        for i in all_call_history_var_list:
+            csv[0].append(csv[0][i] + str(r))
 
 #Find locations of rows containing first attempt.
 
     first_attempt_rows = []
     list_of_ids = []
-    for i in range(len(list_of_list)):
-        if list_of_list[i][user_input["attempts"]] == '1':
+    for i in range(len(csv)):
+        if csv[i][user_input["attempts"]] == '1':
             first_attempt_rows.append(i)
-            list_of_ids.append(list_of_list[i][user_input["id"]])
+            list_of_ids.append(csv[i][user_input["id"]])
 
 #Create a dictionary of unique case IDs and the rows associated with them that contain information for attempts 2+.
 
     ids_and_rows = collections.defaultdict(list)
 
-    for row in range(1,len(list_of_list)):
+    for row in range(1,len(csv)):
         if not row in first_attempt_rows:
-            ids_and_rows[list_of_list[row][user_input["id"]]].append(row)
+            ids_and_rows[csv[row][user_input["id"]]].append(row)
 
 #Add information from rows containing information for attempts 2+ to row containing information for attempt 1.
 
     temp_list = []
     for i in first_attempt_rows:
-        temp_list = ids_and_rows[list_of_list[i][user_input["id"]]]
+        temp_list = ids_and_rows[csv[i][user_input["id"]]]
         for i2 in temp_list:
             for i3 in all_call_history_var_list:
-                list_of_list[i].append(list_of_list[i2][i3])
+                csv[i].append(csv[i2][i3])
                                  
 #Delete extra rows.
 
-    for i in range(1, len(list_of_list)):
-        if int(list_of_list[-1][user_input["attempts"]]) != 1:
-                   list_of_list.pop(-1)
+    for i in range(1, len(csv)):
+        if int(csv[-1][user_input["attempts"]]) != 1:
+                   csv.pop(-1)
 
-    return list_of_list
+    return csv
 
 #Convert back to comma de-limited string.
 
 def data_to_csv(data):
     output = ''
 
-    for i in range(len(list_of_list)):
-        for i2 in range(len(list_of_list[i])):
-            output = output + list_of_list[i][i2] + ','
+    for i in range(len(data)):
+        for i2 in range(len(data[i])):
+            output = output + data[i][i2] + ','
         output = output + '\n'
 
     return output
@@ -128,7 +128,7 @@ def write_to_file(csv):
     output_file = tkinter.filedialog.asksaveasfilename()
     to_file = open(output_file, 'w')
 
-    to_file.write(output)
+    to_file.write(csv)
     to_file.close()
 
 csv = read_file()

@@ -49,7 +49,7 @@ all_call_history_var_list.sort()
 header = list_of_list.pop(0)
 
 #Sort by attempts.
-list_of_list.sort(key=lambda x: x[attempts_var])
+list_of_list.sort(key=lambda x: int(x[attempts_var]))
 
 #Insert header back.
 list_of_list.insert(0, header)
@@ -58,7 +58,7 @@ list_of_list.insert(0, header)
 attempts = []
 
 for i in range(1, (len(list_of_list))):
-    attempts.append(list_of_list[i][attempts_var])
+    attempts.append(int(list_of_list[i][attempts_var]))
 
 max_attempts = int(max(attempts))
 

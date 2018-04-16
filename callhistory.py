@@ -56,8 +56,10 @@ def consolidate_rows(csv, user_input):
     #Temporarily remove header row.
     header = list_of_list.pop(0)
 
+
     #Sort by attempts.
-    list_of_list.sort(key=lambda x: x[user_input["attempts"]])
+    list_of_list.sort(key=lambda x: int(x[user_input["attempts"]]))
+
 
     #Insert header back.
     list_of_list.insert(0, header)
@@ -65,8 +67,10 @@ def consolidate_rows(csv, user_input):
     #Append additional headers for max # of attempts.
     attempts = []
 
+
     for i in range(1, (len(list_of_list))):
-        attempts.append(list_of_list[i][user_input["attempts"]])
+        attempts.append(int(list_of_list[i][user_input["attempts"]]))
+
 
     max_attempts = int(max(attempts))
 
